@@ -1,6 +1,10 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Setting up environment variables.
+-You will need to install dotenv. run npm i dotenv to do so.
+-create a .env.development file in the root directory of the repository.
+-add the database name to the file => PGDATABASE=your_db_name_here.
+-You can find the database names in the setup.sql file located in the /db directory.
 
 
 
