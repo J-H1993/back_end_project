@@ -4,6 +4,7 @@ const request = require('supertest')
 const data = require('../db/data/test-data/index')
 const seed = require('../db/seeds/seed')
 const endpoints = require('../endpoints.json')
+const jestSorted = require('jest-sorted')
 
 beforeEach(() => seed(data))
 afterAll(() => db.end())
@@ -43,7 +44,6 @@ describe('GET /api/articles/4', ()=>{
         .get('/api/articles/4')
         .expect(200)
         .then(({body})=>{
-            console.log(body)
         expect(body.article.article_id).toBe(4)
         })
     })      
@@ -72,3 +72,17 @@ describe('.all(*) - handles any endpoint that does not exist', () =>{
             })
         });
     })
+
+describe('/api/articles', () => {
+    test('should return an array of article objects with the correct shape.', () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles.length).toBe(5)
+            const articles = body.articles
+            expect(articles).toBeSorted({descending: true})
+        })
+    });
+})
+
