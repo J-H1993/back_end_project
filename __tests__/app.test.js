@@ -45,6 +45,16 @@ describe('GET /api/articles/4', ()=>{
         .expect(200)
         .then(({body})=>{
         expect(body.article.article_id).toBe(4)
+        const article = body.article
+        expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author:expect.any(String),
+            body: expect.any(String),
+            created_at:expect.any(String),
+            article_img_url: expect.any(String)
+        })
         })
     })      
     });
@@ -58,6 +68,17 @@ describe('GET /api/articles/9999999', () => {
             expect(body.msg).toBe("Article not found")
         })
         
+    });
+})
+
+describe('GET/api/articles/very-wrong-req', () =>{
+    test('should return a 404 as the endpoint doesnt exist', () => {
+        return request(app)
+        .get('/api/articles/very-wrong-req')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("Route not found")
+        })
     });
 })
 
