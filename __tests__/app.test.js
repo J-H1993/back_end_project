@@ -72,12 +72,12 @@ describe('GET /api/articles/9999999', () => {
 })
 
 describe('GET/api/articles/very-wrong-req', () =>{
-    test('should return a 404 as the endpoint doesnt exist', () => {
+    test('should return a 400 as the data doesnt exist in the table', () => {
         return request(app)
         .get('/api/articles/very-wrong-req')
-        .expect(404)
+        .expect(400)
         .then(({body})=>{
-            expect(body.msg).toBe("Route not found")
+            expect(body.msg).toBe("Bad Request")
         })
     });
 })
