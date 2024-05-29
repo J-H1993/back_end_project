@@ -25,5 +25,9 @@ exports.selectOrderedArticles = () =>{
     Group BY articles.article_id
     ORDER BY articles.created_at DESC`)
     .then((result)=>result.rows)
-    
 }
+
+exports.selectArticleCommentsById = (article_id) =>{
+    return db.query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+    .then((result)=> result.rows)
+    }
