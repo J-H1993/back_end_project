@@ -94,7 +94,7 @@ describe('.all(*) - handles any endpoint that does not exist', () =>{
         });
     })
 
-describe('/api/articles', () => {
+describe('GET /api/articles', () => {
     test('should return an array of article objects with the correct shape.', () => {
         return request(app)
         .get("/api/articles")
@@ -103,7 +103,40 @@ describe('/api/articles', () => {
             expect(body.articles.length).toBe(5)
             const articles = body.articles
             expect(articles).toBeSorted({descending: true})
+            articles.forEach((article)=>{
+                expect(article).toMatchObject({
+                    article_id: expect.any(Number),
+                    title:expect.any(String),
+                    topic:expect.any(String),
+                    author:expect.any(String),
+                    created_at:expect.any(String),
+                    votes:expect.any(Number),
+                    article_img_url:expect.any(String),
+                    comment_count:expect.any(String)
+                })
+            })
         })
     });
 })
 
+describe('GET /api/articles/4/comments', ()=>{
+    test('should return the comments object for the specified article with the correct shape', () =>{
+        return request(app)
+        .get('/api/articles/4/comments')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual([])
+        })
+    })
+})
+
+describe('GET /api/articles/incorrect_query/comments',()=>{
+    test('should return a 400 as it is a bad request', () => {
+        return request(app)
+        .get('/api/articles/incorrect_query/comments')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    });
+})
