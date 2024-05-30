@@ -132,7 +132,7 @@ describe('GET /api/articles/6/comments', ()=>{
                     body:expect.any(String),
                     votes:expect.any(Number),
                     author:expect.any(String),
-                    article_id:expect.any(Number),
+                    article_id:6,
                     created_at:expect.any(String)
                 })
             })
@@ -172,7 +172,7 @@ describe('POST /api/articles/:article_id/comments',()=>{
         })
    });
 
-describe('Post /api/articles/6/missSpelled', () =>{
+describe('POST /api/articles/6/comments', () =>{
     test('should return 404 route not found', () => {
         return request(app)
         .post('/api/articles/6/missSpelled')
@@ -184,8 +184,8 @@ describe('Post /api/articles/6/missSpelled', () =>{
     });
 })
 
-describe('Post /api/articles/6/missSpelled', () =>{
-    test('should return 400 bad request doesnt match column names in the db', () => {
+describe('POST /api/articles/6/comments', () =>{
+    test('should return 400 bad request, input will cause database error', () => {
         return request(app)
         .post('/api/articles/6/comments')
         .send({Chicken:'lurker',Horse:'I like tacos'})
@@ -195,3 +195,50 @@ describe('Post /api/articles/6/missSpelled', () =>{
         })
     });
 })
+
+describe('PATCH /api/articles/5', () =>{
+    test('should return a 201 code and the updated object with votes incremented 3 times', () =>{
+        return request(app)
+        .patch('/api/articles/5')
+        .send({inc_votes: 3})
+        .expect(201)
+        .then(({body}) =>{
+            expect(body.patchedArticle).toMatchObject({
+                article_id:5,
+                title:expect.any(String),
+                topic:expect.any(String),
+                author:expect.any(String),
+                created_at:expect.any(String),
+                votes:3,
+                article_img_url:expect.any(String),
+            })
+        })
+    })
+})
+
+describe('PATCH /api/articles/9999999', () =>{
+    test('should return a 404 as the article to patch does not exist', () =>{
+        return request(app)
+        .patch('/api/articles/9999999')
+        .send({inc_votes: 3})
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("Article not found patch failed")
+        })
+
+    })
+})
+
+describe('PATCH /api/articles/5', () =>{
+    test('should return a 400 as the input will cause a database error', () =>{
+        return request(app)
+        .patch('/api/articles/5')
+        .send({inc_votes:'incorrect_data'})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+
+    })
+})
+
