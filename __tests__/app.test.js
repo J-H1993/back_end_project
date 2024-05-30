@@ -242,3 +242,35 @@ describe('PATCH /api/articles/5', () =>{
     })
 })
 
+describe('DELETE /api/comments/:comment_id', () =>{
+    test('should return a 204 status and no content ', () => {
+        return request(app)
+        .delete('/api/comments/6')
+        .expect(204)
+        .then(({body})=>{
+            expect(body).toEqual({})
+        })
+    });
+})
+
+describe('DELETE /api/comments/:comment_id', () =>{
+    test('should return a 404 as the comment will not exist', () =>{
+        return request(app)
+        .delete('/api/comments/99999999')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('Comment not found, nothing to delete')
+        })
+    });
+})
+
+describe('DELETE /api/comments/:comment_id', () =>{
+    test('should return a 404 as the input will cause a database error', () =>{
+        return request(app)
+        .delete('/api/missSpelled/6')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('Route not found')
+        })
+    });
+})
