@@ -3,6 +3,7 @@ const {sendTopics, sendOrderedArticles} = require('./controllers/news.controller
 const {sendEndpoints} = require('./controllers/news.controllers')
 const {sendArticle} = require('./controllers/news.controllers')
 const {sendArticleCommentsById} = require('./controllers/news.controllers')
+const {addComment} = require('./controllers/news.controllers')
 
 const app = express()
 
@@ -17,6 +18,9 @@ app.get('/api/articles/:article_id', sendArticle)
 app.get('/api/articles', sendOrderedArticles)
 
 app.get('/api/articles/:article_id/comments',sendArticleCommentsById)
+
+app.post('/api/articles/:article_id/comments', addComment)
+
 
 app.all('*', (req, res)=>{
     res.status(404).send ({msg:"Route not found"})
