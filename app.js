@@ -6,6 +6,7 @@ const {sendArticleCommentsById} = require('./controllers/news.controllers')
 const {addComment} = require('./controllers/news.controllers')
 const {addVotes} = require('./controllers/news.controllers')
 const {removeComment} = require('./controllers/news.controllers')
+const {sendUsers} = require('./controllers/news.controllers')
 const app = express()
 
 app.use(express.json())
@@ -25,6 +26,8 @@ app.post('/api/articles/:article_id/comments', addComment)
 app.patch('/api/articles/:article_id', addVotes)
 
 app.delete('/api/comments/:comment_id', removeComment)
+
+app.get('/api/users', sendUsers)
 
 
 app.all('*', (req, res)=>{

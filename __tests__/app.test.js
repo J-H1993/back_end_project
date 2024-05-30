@@ -274,3 +274,33 @@ describe('DELETE /api/comments/:comment_id', () =>{
         })
     });
 })
+
+describe('GET /api/users', ()=>{
+    test('should respond with an array of all user objects with the correct shape.', () => {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.users.length).toBe(4)
+            const users = body.users
+            users.forEach((user)=>{
+                expect(user).toMatchObject({
+                    username:expect.any(String),
+                    name:expect.any(String),
+                    avatar_url:expect.any(String)
+                })
+            })
+        })
+    });
+})
+
+describe('GET /api/users', ()=>{
+    test('should respond with the correct error code and message.', () => {
+        return request(app)
+        .get('/api/missSpelt')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("Route not found")
+        })
+    })
+})
