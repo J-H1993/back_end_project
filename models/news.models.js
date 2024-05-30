@@ -38,3 +38,16 @@ exports.insertComment = (article_id ,newComment) => {
     .then((result)=> result.rows[0])
 }
 
+exports.insertVotes = (article_id, uVotes) =>{
+    return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [uVotes, article_id])
+    .then(({rows})=>{
+        const patchedArticle = rows[0]
+        if(!patchedArticle){
+            return Promise.reject({
+                status:404,
+                msg: "Article not found patch failed"
+            })
+        }
+        return patchedArticle
+    })
+}
