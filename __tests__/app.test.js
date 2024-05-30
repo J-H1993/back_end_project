@@ -119,13 +119,25 @@ describe('GET /api/articles', () => {
     });
 })
 
-describe('GET /api/articles/4/comments', ()=>{
+describe('GET /api/articles/6/comments', ()=>{
     test('should return the comments object for the specified article with the correct shape', () =>{
         return request(app)
-        .get('/api/articles/4/comments')
+        .get('/api/articles/6/comments')
         .expect(200)
         .then(({body})=>{
-            expect(body.comments).toEqual([])
+            const comments = body.comments
+            expect(comments.length).toBe(1)
+            comments.forEach((comment)=>{
+                expect(comment).toMatchObject({
+                    body:expect.any(String),
+                    votes:expect.any(Number),
+                    author:expect.any(String),
+                    article_id:expect.any(Number),
+                    created_at:expect.any(String)
+                })
+            })
+
+
         })
     })
 })
@@ -134,6 +146,49 @@ describe('GET /api/articles/incorrect_query/comments',()=>{
     test('should return a 400 as it is a bad request', () => {
         return request(app)
         .get('/api/articles/incorrect_query/comments')
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad Request')
+        })
+    });
+})
+
+describe('POST /api/articles/:article_id/comments',()=>{
+    test('should add a comment for the correct article based on given id ', () => {
+        return request(app)
+        .post('/api/articles/6/comments')
+        .send({username:'lurker',body:'I like tacos'})
+        .expect(201)
+        .then(({body}) =>{
+        expect(body.comment).toMatchObject({
+            comment_id:expect.any(Number),
+            body:'I like tacos',
+            votes:expect.any(Number),
+            author:'lurker',
+            article_id:6,
+            created_at:expect.any(String)
+        })
+        })
+        })
+   });
+
+describe('Post /api/articles/6/missSpelled', () =>{
+    test('should return 404 route not found', () => {
+        return request(app)
+        .post('/api/articles/6/missSpelled')
+        .send({username:'lurker',body:'I like tacos'})
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('Route not found')
+        })
+    });
+})
+
+describe('Post /api/articles/6/missSpelled', () =>{
+    test('should return 400 bad request doesnt match column names in the db', () => {
+        return request(app)
+        .post('/api/articles/6/comments')
+        .send({Chicken:'lurker',Horse:'I like tacos'})
         .expect(400)
         .then(({body})=>{
             expect(body.msg).toBe('Bad Request')
