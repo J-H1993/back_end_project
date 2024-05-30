@@ -4,6 +4,7 @@ const {selectOrderedArticles} = require('../models/news.models')
 const {selectArticleCommentsById} = require('../models/news.models')
 const {insertComment} = require('../models/news.models')
 const {insertVotes} = require('../models/news.models')
+const {deleteComment} = require('../models/news.models')
 const endPoints = require('../endpoints.json')
 
 exports.sendTopics = (req, res, next) => {
@@ -43,5 +44,11 @@ exports.addVotes = (req, res, next) => {
     const {article_id} = req.params
     const uVotes = req.body.inc_votes
     insertVotes(article_id, uVotes).then((patchedArticle)=> res.status(201).send({patchedArticle}))
+    .catch(next)
+}
+
+exports.removeComment = (req, res, next) =>{
+    const {comment_id} = req.params
+    deleteComment(comment_id).then((removedData)=> res.status(204).send(removedData))
     .catch(next)
 }

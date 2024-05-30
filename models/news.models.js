@@ -51,3 +51,17 @@ exports.insertVotes = (article_id, uVotes) =>{
         return patchedArticle
     })
 }
+
+exports.deleteComment = (comment_id) =>{
+    return db.query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [comment_id])
+    .then(({rows})=>{
+        const deletedComment = rows[0]
+        if(!deletedComment){
+            return Promise.reject({
+                status:404,
+                msg:"Comment not found, nothing to delete"
+            })
+        }
+        return deletedComment;
+    })
+}
