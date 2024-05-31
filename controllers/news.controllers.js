@@ -24,7 +24,8 @@ exports.sendArticle = (req, res, next) =>{
 }
 
 exports.sendOrderedArticles = (req, res, next) =>{
-    selectOrderedArticles().then((articles)=> res.status(200).send({articles}))
+    const {topic} = req.query
+    selectOrderedArticles(topic).then((articles)=> res.status(200).send({articles}))
     .catch(next)
 }
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const {sendTopics, sendOrderedArticles} = require('./controllers/news.controllers')
+const {sendTopics, sendOrderedArticles, sendfilteredArticles} = require('./controllers/news.controllers')
 const {sendEndpoints} = require('./controllers/news.controllers')
 const {sendArticle} = require('./controllers/news.controllers')
 const {sendArticleCommentsById} = require('./controllers/news.controllers')
@@ -10,6 +10,10 @@ const {sendUsers} = require('./controllers/news.controllers')
 const app = express()
 
 app.use(express.json())
+
+
+
+
 
 app.get('/api/topics',sendTopics)
 
@@ -28,6 +32,11 @@ app.patch('/api/articles/:article_id', addVotes)
 app.delete('/api/comments/:comment_id', removeComment)
 
 app.get('/api/users', sendUsers)
+
+
+
+
+
 
 
 app.all('*', (req, res)=>{
