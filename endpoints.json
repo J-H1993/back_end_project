@@ -140,8 +140,23 @@
                 }
               ]
             }
-          }
-        } 
-        
-      
-      
+          },
+          "GET /api/articles?topic=cats": {
+            "description": "Serves an array of articles filtered by the query of topic",
+            "queries": ["author","title","article_id","topic","created_at","votes","article_img_url","comment_count"],
+            "exampleResponse": {
+                "articles": [
+                    {
+                        "article_id": 5,
+                        "title": "UNCOVERED: catspiracy to bring down democracy",
+                        "topic": "cats",
+                        "author": "rogersop",
+                        "created_at": "2020-08-03T13:14:00.000Z",
+                        "votes": 0,
+                        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                        "comment_count": "2"
+                    }
+                ]
+            }
+        }
+      }

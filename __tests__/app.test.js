@@ -304,3 +304,25 @@ describe('GET /api/users', ()=>{
         })
     })
 })
+
+describe('GET /api/articles?topic=cats', ()=>{
+    test('should filter responses based on the topic added in the query', ()=>{
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles.length).toBe(1)
+        })
+    })
+})
+
+describe('GET /api/articles?topic=cats', () =>{
+    test('should return 404 with misspelt query ', () => {
+        return request(app)
+        .get('/api/articles?topic=miss_spelt')
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('Topic not found')
+        })
+    });
+})
