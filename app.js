@@ -7,7 +7,11 @@ const {addComment} = require('./controllers/news.controllers')
 const {addVotes} = require('./controllers/news.controllers')
 const {removeComment} = require('./controllers/news.controllers')
 const {sendUsers} = require('./controllers/news.controllers')
+const cors = require('cors')
 const app = express()
+
+app.use(cors())
+
 
 app.use(express.json())
 
